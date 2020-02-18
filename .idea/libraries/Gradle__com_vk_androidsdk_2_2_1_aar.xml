@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.vk:androidsdk:2.2.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4af0739437ee77c079239e6a5fe5f051/androidsdk-2.2.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4af0739437ee77c079239e6a5fe5f051/androidsdk-2.2.1/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vk/androidsdk/2.2.1/f8a34d08ec302399de2c70c835b709d779de305f/androidsdk-2.2.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vk/androidsdk/2.2.1/8c096ee0ffd56ce1e5eab6e0b3437f8e5428fd76/androidsdk-2.2.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
