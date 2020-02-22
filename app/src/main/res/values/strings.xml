@@ -1,14 +1,20 @@
 <resources>
-    <string name="app_name">Документы</string>
+    <string name="app_name">Шаринг контента</string>
     <string name="error_auth_message">Не удалось авторизироваться, попробовать еще раз?</string>
     <string name="error_message">Не удалось выполнить операцию, попробуйте позже</string>
     <string name="title">Делитесь фотографиями</string>
     <string name="description">Поделитесь фотографией на стене, \nи добавьте к ней описание.</string>
     <string name="select_photo">Выбрать фото</string>
+    <string name="share_on_the_wall">Поделиться на стене</string>
+    <string name="add_comment">Добавить комментарий</string>
+    <string name="send">Отправить</string>
 
     <string name="error">Ошибка</string>
     <string name="ok">Ок</string>
     <string name="cancel">Отмена</string>
+
+    <string name="success">Успех</string>
+    <string name="success_message">Вы успешно поделились записью на стене</string>
 
     <integer name="com_vk_sdk_AppId">7260467</integer>
 </resources>
