@@ -63,16 +63,10 @@ class MainActivity : AppCompatActivity(), ShareContentBottomSheetDialogFragment.
             showError()
             return
         }
-
         val photo  = Uri.parse(PathUtils.getPath(this, photoUri))
-        val photos = ArrayList<Uri>()
-        photo.let {
-            photos.add(it)
-        }
-
         VK.execute(VKWallPostCommand(
             message,
-            photos
+            photo
         ), object: VKApiCallback<Int> {
             override fun success(result: Int) {
                 showSuccess()
@@ -117,7 +111,7 @@ class MainActivity : AppCompatActivity(), ShareContentBottomSheetDialogFragment.
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.error))
             .setMessage(getString(R.string.error_auth_message))
-            .setPositiveButton(R.string.ok) { _, _ -> VK.login(this, arrayListOf(VKScope.DOCS)) }
+            .setPositiveButton(R.string.ok) { _, _ -> VK.login(this, arrayListOf(VKScope.PHOTOS, VKScope.WALL)) }
             .setNegativeButton(R.string.cancel) { _, _ -> finish() }
             .show()
     }

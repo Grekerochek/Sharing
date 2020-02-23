@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 class VKWallPostCommand(
     private val message: String? = null,
     private val photo: Uri
-): ApiCommand<Int>() {
+) : ApiCommand<Int>() {
     override fun onExecute(manager: VKApiManager): Int {
         val callBuilder = VKMethodCall.Builder()
             .method("wall.post")
@@ -41,28 +41,32 @@ class VKWallPostCommand(
         return manager.execute(uploadInfoCall, ServerUploadInfoParser())
     }
 
-    private fun uploadPhoto(uri: Uri, serverUploadInfo: VKServerUploadInfo, manager: VKApiManager): String {
+    private fun uploadPhoto(
+        uri: Uri,
+        serverUploadInfo: VKServerUploadInfo,
+        manager: VKApiManager
+    ): String {
 
-       /* val requestBody = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addPart(
-                Headers.of("Content-Disposition", "form-data; name=\"title\""),
-                RequestBody.create(null, "Square Logo")
-            )
-            .addPart(
-                Headers.of("Content-Disposition", "form-data; name=\"image\""),
-                RequestBody.create(MediaType.parse("image/jpeg"),
-                    HttpMultipartEntry.File(uri) as File)
-                )
-            .build()
+        /* val requestBody = MultipartBody.Builder()
+             .setType(MultipartBody.FORM)
+             .addPart(
+                 Headers.of("Content-Disposition", "form-data; name=\"title\""),
+                 RequestBody.create(null, "Square Logo")
+             )
+             .addPart(
+                 Headers.of("Content-Disposition", "form-data; name=\"image\""),
+                 RequestBody.create(MediaType.parse("image/jpeg"),
+                     HttpMultipartEntry.File(uri) as File)
+                 )
+             .build()
 
-        val request = Request.Builder()
-            .header("Authorization", "Client-ID ...")
-            .url(serverUploadInfo.uploadUrl)
-            .post(requestBody)
-            .build()
+         val request = Request.Builder()
+             .header("Authorization", "Client-ID ...")
+             .url(serverUploadInfo.uploadUrl)
+             .post(requestBody)
+             .build()
 
-        val response = OkHttpClient().newCall(request).execute()*/
+         val response = OkHttpClient().newCall(request).execute()*/
 
 
         val fileUploadCall = VKHttpPostCall.Builder()
@@ -101,19 +105,20 @@ class VKWallPostCommand(
     }
 
     private class ServerUploadInfoParser : VKApiResponseParser<VKServerUploadInfo> {
-        override fun parse(response: String): VKServerUploadInfo{
+        override fun parse(response: String): VKServerUploadInfo {
             try {
                 val joResponse = JSONObject(response).getJSONObject("response")
                 return VKServerUploadInfo(
-                    uploadUrl = joResponse.getString("upload_url"))
+                    uploadUrl = joResponse.getString("upload_url")
+                )
             } catch (ex: JSONException) {
                 throw VKApiIllegalResponseException(ex)
             }
         }
     }
 
-    private class FileUploadInfoParser: VKApiResponseParser<VKFileUploadInfo> {
-        override fun parse(response: String): VKFileUploadInfo{
+    private class FileUploadInfoParser : VKApiResponseParser<VKFileUploadInfo> {
+        override fun parse(response: String): VKFileUploadInfo {
             try {
                 val joResponse = JSONObject(response)
                 return VKFileUploadInfo(
@@ -127,7 +132,7 @@ class VKWallPostCommand(
         }
     }
 
-    private class SaveInfoParser: VKApiResponseParser<VKSaveInfo> {
+    private class SaveInfoParser : VKApiResponseParser<VKSaveInfo> {
         override fun parse(response: String): VKSaveInfo {
             try {
                 val joResponse = JSONObject(response).getJSONArray("response").getJSONObject(0)

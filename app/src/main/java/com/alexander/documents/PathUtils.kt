@@ -14,7 +14,6 @@ object PathUtils {
         val cursor = context.contentResolver.query(uri, proj, null, null, null)
         val columnIndex = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         cursor.moveToFirst()
-      //  return "file://" + cursor.getString(columnIndex)
-        return cursor.getString(columnIndex)
+        return "file://" + cursor.getString(columnIndex)
     }
 }
