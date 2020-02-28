@@ -1,8 +1,10 @@
 package com.alexander.documents.ui
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +16,8 @@ import com.vk.api.sdk.auth.VKAuthCallback
 import com.vk.api.sdk.auth.VKScope
 import kotlinx.android.synthetic.main.activity_main.*
 import android.net.Uri
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.alexander.documents.PathUtils
 import com.alexander.documents.R
 import com.alexander.documents.api.VKWallPostCommand
@@ -34,14 +38,14 @@ class MainActivity : AppCompatActivity(), ShareContentBottomSheetDialogFragment.
         if (!VK.isLoggedIn()) {
             VK.login(this, arrayListOf(VKScope.PHOTOS, VKScope.WALL))
         } else {
-            selectPhotoButton.setOnClickListener { selectPhoto() }
+            selectPhotoButton.setOnClickListener { askPermissionReadExternalStorage() }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val callback = object : VKAuthCallback {
             override fun onLogin(token: VKAccessToken) {
-                selectPhotoButton.setOnClickListener { selectPhoto() }
+                selectPhotoButton.setOnClickListener { askPermissionReadExternalStorage() }
             }
 
             override fun onLoginFailed(errorCode: Int) {
@@ -54,6 +58,19 @@ class MainActivity : AppCompatActivity(), ShareContentBottomSheetDialogFragment.
         }
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data?.data != null) {
             showBottomSheetDialog(imageUri = data.data!!)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        if (
+            requestCode == PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE &&
+            grantResults.isNotEmpty() &&
+            grantResults[0] == PackageManager.PERMISSION_GRANTED
+        ) {
+            selectPhoto()
         }
     }
 
@@ -76,6 +93,23 @@ class MainActivity : AppCompatActivity(), ShareContentBottomSheetDialogFragment.
                 showError()
             }
         })
+    }
+
+    private fun askPermissionReadExternalStorage() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
+            )
+        } else {
+            selectPhoto()
+        }
     }
 
     private fun showBottomSheetDialog(imageUri: Uri) {
@@ -117,7 +151,7 @@ class MainActivity : AppCompatActivity(), ShareContentBottomSheetDialogFragment.
     }
 
     companion object {
-
+        private const val PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1
         private const val PREFERENCE_NAME = "com.vkontakte.android_pref_name"
         private const val GALLERY_REQUEST_CODE = 0
 

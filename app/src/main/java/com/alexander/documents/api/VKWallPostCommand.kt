@@ -47,33 +47,10 @@ class VKWallPostCommand(
         manager: VKApiManager
     ): String {
 
-        /* val requestBody = MultipartBody.Builder()
-             .setType(MultipartBody.FORM)
-             .addPart(
-                 Headers.of("Content-Disposition", "form-data; name=\"title\""),
-                 RequestBody.create(null, "Square Logo")
-             )
-             .addPart(
-                 Headers.of("Content-Disposition", "form-data; name=\"image\""),
-                 RequestBody.create(MediaType.parse("image/jpeg"),
-                     HttpMultipartEntry.File(uri) as File)
-                 )
-             .build()
-
-         val request = Request.Builder()
-             .header("Authorization", "Client-ID ...")
-             .url(serverUploadInfo.uploadUrl)
-             .post(requestBody)
-             .build()
-
-         val response = OkHttpClient().newCall(request).execute()*/
-
-
         val fileUploadCall = VKHttpPostCall.Builder()
             .url(serverUploadInfo.uploadUrl)
             .args("photo", uri)
             .timeout(TimeUnit.MINUTES.toMillis(5))
-            .retryCount(RETRY_COUNT)
             .build()
         val fileUploadInfo = manager.execute(fileUploadCall, null, FileUploadInfoParser())
 
@@ -88,10 +65,6 @@ class VKWallPostCommand(
         val saveInfo = manager.execute(saveCall, SaveInfoParser())
 
         return saveInfo.getAttachment()
-    }
-
-    companion object {
-        const val RETRY_COUNT = 3
     }
 
     private class ResponseApiParser : VKApiResponseParser<Int> {
